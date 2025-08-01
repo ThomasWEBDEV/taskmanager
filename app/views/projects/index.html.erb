@@ -1,2 +1,31 @@
-<h1>Projects#index</h1>
-<p>Find me in app/views/projects/index.html.erb</p>
+<h1>Mes Projets</h1>
+
+<%= link_to "Nouveau Projet", new_project_path, class: "btn btn-primary mb-3" %>
+
+<% if @projects.any? %>
+  <div class="row">
+    <% @projects.each do |project| %>
+      <div class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= project.title %></h5>
+            <p class="card-text"><%= project.description %></p>
+            <p class="text-muted small">
+              <%= pluralize(project.tasks.count, 'tâche') %>
+            </p>
+            <%= link_to "Voir", project, class: "btn btn-outline-primary btn-sm" %>
+            <%= link_to "Modifier", edit_project_path(project), class: "btn btn-outline-secondary btn-sm" %>
+            <%= link_to "Supprimer", project, method: :delete,
+                        confirm: "Êtes-vous sûr ?",
+                        class: "btn btn-outline-danger btn-sm" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="alert alert-info">
+    <h4>Aucun projet</h4>
+    <p>Commencez par créer votre premier projet !</p>
+  </div>
+<% end %>
