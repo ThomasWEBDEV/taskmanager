@@ -3,7 +3,10 @@
   <div>
     <%= link_to "Modifier", edit_project_path(@project), class: "btn btn-outline-secondary" %>
     <%= link_to "Supprimer", @project, method: :delete,
-                confirm: "Êtes-vous sûr ?",
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Êtes-vous sûr de vouloir supprimer ce projet et toutes ses tâches ?"
+                },
                 class: "btn btn-outline-danger" %>
   </div>
 </div>
@@ -40,11 +43,14 @@
           <div>
             <%= link_to "Voir", task, class: "btn btn-outline-primary btn-sm" %>
             <% unless task.completed %>
-              <%= link_to "Terminer", task, method: :patch,
+              <%= link_to "Terminer", task, method: :patch, data: { turbo_method: :patch },
                           class: "btn btn-outline-success btn-sm" %>
             <% end %>
             <%= link_to "Supprimer", task, method: :delete,
-                        confirm: "Êtes-vous sûr ?",
+                        data: {
+                          turbo_method: :delete,
+                          turbo_confirm: "Êtes-vous sûr de vouloir supprimer cette tâche ?"
+                        },
                         class: "btn btn-outline-danger btn-sm" %>
           </div>
         </div>

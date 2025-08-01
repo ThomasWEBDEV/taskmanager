@@ -33,11 +33,14 @@
           <div>
             <%= link_to "Voir", task, class: "btn btn-outline-primary btn-sm" %>
             <% unless task.completed %>
-              <%= link_to "Terminer", task, method: :patch, class: "btn btn-outline-success btn-sm" %>
+              <%= link_to "Terminer", task, method: :patch, data: { turbo_method: :patch }, class: "btn btn-outline-success btn-sm" %>
             <% end %>
             <%= link_to "Supprimer", task, method: :delete,
-                        confirm: "Êtes-vous sûr ?",
-                        class: "btn btn-outline-danger btn-sm" %>
+                                          data: {
+                                            turbo_method: :delete,
+                                            turbo_confirm: "Êtes-vous sûr ?"
+                                          },
+                                          class: "btn btn-outline-danger btn-sm" %>
           </div>
         </div>
       </div>
