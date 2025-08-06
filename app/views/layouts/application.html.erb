@@ -20,7 +20,7 @@
           <span class="mx-3">Bonjour <%= current_user.email %></span>
           <%= link_to "Mes Projets", projects_path, class: "btn btn-sm btn-secondary" %>
           <%= link_to "Mes Tâches", tasks_path, class: "btn btn-sm btn-secondary" %>
-          <%= link_to "Déconnexion", destroy_user_session_path, method: :delete, class: "btn btn-sm btn-outline-danger" %>
+          <%= link_to "Déconnexion", destroy_user_session_path, data: { "turbo-method": :delete } %>
         <% else %>
           <%= link_to "Connexion", new_user_session_path, class: "btn btn-sm btn-primary" %>
           <%= link_to "Inscription", new_user_registration_path, class: "btn btn-sm btn-success" %>
