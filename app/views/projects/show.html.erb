@@ -2,9 +2,10 @@
   <h1><%= @project.title %></h1>
   <div>
     <%= link_to "Modifier", edit_project_path(@project), class: "btn btn-outline-secondary" %>
-    <%= link_to "Supprimer", @project, method: :delete,
-                confirm: "Êtes-vous sûr ?",
-                class: "btn btn-outline-danger" %>
+    <%= button_to "Supprimer", @project,
+              method: :delete,
+              confirm: "Êtes-vous sûr ?",
+              class: "btn btn-outline-danger" %>
   </div>
 </div>
 
@@ -42,9 +43,10 @@
               <%= link_to "Terminer", task, method: :patch,
                           class: "btn btn-outline-success btn-sm" %>
             <% end %>
-            <%= link_to "Supprimer", task, method: :delete,
-                        confirm: "Êtes-vous sûr ?",
-                        class: "btn btn-outline-danger btn-sm" %>
+            <%= button_to "Supprimer", task,
+              method: :delete,
+              confirm: "Êtes-vous sûr ?",
+              class: "btn btn-outline-danger btn-sm" %>
           </div>
         </div>
       </div>

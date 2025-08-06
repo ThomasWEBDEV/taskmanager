@@ -15,9 +15,10 @@
             </p>
             <%= link_to "Voir", project, class: "btn btn-outline-primary btn-sm" %>
             <%= link_to "Modifier", edit_project_path(project), class: "btn btn-outline-secondary btn-sm" %>
-            <%= link_to "Supprimer", project, method: :delete,
-                        confirm: "Êtes-vous sûr ?",
-                        class: "btn btn-outline-danger btn-sm" %>
+            <%= button_to "Supprimer", project,
+              method: :delete,
+              confirm: "Êtes-vous sûr ?",
+              class: "btn btn-outline-danger btn-sm" %>
           </div>
         </div>
       </div>

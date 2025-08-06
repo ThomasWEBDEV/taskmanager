@@ -9,11 +9,14 @@
   </h1>
   <div>
     <% unless @task.completed %>
-      <%= link_to "Marquer terminé", @task, method: :patch, class: "btn btn-success" %>
+      <%= button_to "Marquer terminé", @task,
+              method: :patch,
+              class: "btn btn-success" %>
     <% end %>
-    <%= link_to "Supprimer", @task, method: :delete,
-                confirm: "Êtes-vous sûr ?",
-                class: "btn btn-outline-danger" %>
+    <%= button_to "Supprimer", @task,
+              method: :delete,
+              confirm: "Êtes-vous sûr ?",
+              class: "btn btn-outline-danger btn-sm" %>
   </div>
 </div>
 
