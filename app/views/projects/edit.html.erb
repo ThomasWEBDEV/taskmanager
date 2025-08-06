@@ -1,2 +1,29 @@
-<h1>Projects#edit</h1>
-<p>Find me in app/views/projects/edit.html.erb</p>
+<h1>Modifier le projet</h1>
+
+<%= form_with model: @project, local: true, class: "row g-3" do |form| %>
+  <% if @project.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@project.errors.count, "erreur") %></h4>
+      <ul class="mb-0">
+        <% @project.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-12">
+    <%= form.label :title, "Titre", class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="col-12">
+    <%= form.label :description, "Description", class: "form-label" %>
+    <%= form.text_area :description, rows: 4, class: "form-control" %>
+  </div>
+
+  <div class="col-12">
+    <%= form.submit "Modifier le projet", class: "btn btn-primary" %>
+    <%= link_to "Voir le projet", @project, class: "btn btn-secondary" %>
+  </div>
+<% end %>

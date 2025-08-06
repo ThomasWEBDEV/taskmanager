@@ -1,2 +1,56 @@
-<h1>Tasks#show</h1>
-<p>Find me in app/views/tasks/show.html.erb</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>
+    <% if @task.completed %>
+      <span class="badge bg-success me-2">✓ Terminé</span>
+    <% else %>
+      <span class="badge bg-warning me-2">⏳ En cours</span>
+    <% end %>
+    <%= @task.title %>
+  </h1>
+  <div>
+    <% unless @task.completed %>
+      <%= link_to "Marquer terminé", @task, method: :patch, class: "btn btn-success" %>
+    <% end %>
+    <%= link_to "Supprimer", @task, method: :delete,
+                confirm: "Êtes-vous sûr ?",
+                class: "btn btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Description :</h5>
+    <p class="card-text"><%= @task.description %></p>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <strong>Projet :</strong>
+        <%= link_to @task.project.title, @task.project %>
+      </div>
+      <div class="col-md-6">
+        <strong>Assigné à :</strong> <%= @task.user.email %>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-6">
+        <strong>Créé le :</strong> <%= @task.created_at.strftime("%d/%m/%Y") %>
+      </div>
+      <div class="col-md-6">
+        <strong>Statut :</strong>
+        <% if @task.completed %>
+          <span class="text-success">Terminé</span>
+        <% else %>
+          <span class="text-warning">En cours</span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <%= link_to "← Retour au projet", @task.project, class: "btn btn-secondary" %>
+  <%= link_to "Toutes mes tâches", tasks_path, class: "btn btn-outline-secondary" %>
+</div>

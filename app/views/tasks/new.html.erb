@@ -1,2 +1,30 @@
-<h1>Tasks#new</h1>
-<p>Find me in app/views/tasks/new.html.erb</p>
+<h1>Nouvelle Tâche</h1>
+<p class="text-muted">Projet : <strong><%= @project.title %></strong></p>
+
+<%= form_with model: [@project, @task], local: true, class: "row g-3" do |form| %>
+  <% if @task.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@task.errors.count, "erreur") %></h4>
+      <ul class="mb-0">
+        <% @task.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-12">
+    <%= form.label :title, "Titre de la tâche", class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="col-12">
+    <%= form.label :description, "Description", class: "form-label" %>
+    <%= form.text_area :description, rows: 3, class: "form-control" %>
+  </div>
+
+  <div class="col-12">
+    <%= form.submit "Créer la tâche", class: "btn btn-success" %>
+    <%= link_to "Retour au projet", @project, class: "btn btn-secondary" %>
+  </div>
+<% end %>

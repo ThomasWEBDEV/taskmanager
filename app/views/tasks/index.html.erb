@@ -1,2 +1,52 @@
-<h1>Tasks#index</h1>
-<p>Find me in app/views/tasks/index.html.erb</p>
+<h1>Mes Tâches</h1>
+
+<% if @tasks.any? %>
+  <div class="row mb-3">
+    <div class="col">
+      <span class="badge bg-success me-2">
+        <%= @tasks.where(completed: true).count %> terminées
+      </span>
+      <span class="badge bg-warning">
+        <%= @tasks.where(completed: false).count %> en cours
+      </span>
+    </div>
+  </div>
+
+  <% @tasks.each do |task| %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h5 class="card-title">
+              <% if task.completed %>
+                <span class="badge bg-success me-2">✓</span>
+              <% else %>
+                <span class="badge bg-warning me-2">⏳</span>
+              <% end %>
+              <%= task.title %>
+            </h5>
+            <p class="card-text"><%= task.description %></p>
+            <small class="text-muted">
+              Projet : <%= link_to task.project.title, task.project %>
+            </small>
+          </div>
+          <div>
+            <%= link_to "Voir", task, class: "btn btn-outline-primary btn-sm" %>
+            <% unless task.completed %>
+              <%= link_to "Terminer", task, method: :patch, class: "btn btn-outline-success btn-sm" %>
+            <% end %>
+            <%= link_to "Supprimer", task, method: :delete,
+                        confirm: "Êtes-vous sûr ?",
+                        class: "btn btn-outline-danger btn-sm" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="alert alert-info">
+    <h4>Aucune tâche</h4>
+    <p>Vous n'avez encore aucune tâche assignée.</p>
+    <%= link_to "Voir mes projets", projects_path, class: "btn btn-primary" %>
+  </div>
+<% end %>

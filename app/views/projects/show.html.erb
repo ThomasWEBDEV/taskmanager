@@ -1,2 +1,61 @@
-<h1>Projects#show</h1>
-<p>Find me in app/views/projects/show.html.erb</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1><%= @project.title %></h1>
+  <div>
+    <%= link_to "Modifier", edit_project_path(@project), class: "btn btn-outline-secondary" %>
+    <%= link_to "Supprimer", @project, method: :delete,
+                confirm: "Êtes-vous sûr ?",
+                class: "btn btn-outline-danger" %>
+  </div>
+</div>
+
+<div class="mb-4">
+  <h5>Description :</h5>
+  <p><%= @project.description %></p>
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Tâches du projet</h3>
+  <%= link_to "Nouvelle Tâche", new_project_task_path(@project), class: "btn btn-success" %>
+</div>
+
+<% if @tasks.any? %>
+  <% @tasks.each do |task| %>
+    <div class="card mb-2">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1">
+              <% if task.completed %>
+                <span class="badge bg-success me-2">Terminé</span>
+              <% else %>
+                <span class="badge bg-warning me-2">En cours</span>
+              <% end %>
+              <%= task.title %>
+            </h6>
+            <p class="mb-1 text-muted"><%= task.description %></p>
+          </div>
+          <div>
+            <%= link_to "Voir", task, class: "btn btn-outline-primary btn-sm" %>
+            <% unless task.completed %>
+              <%= link_to "Terminer", task, method: :patch,
+                          class: "btn btn-outline-success btn-sm" %>
+            <% end %>
+            <%= link_to "Supprimer", task, method: :delete,
+                        confirm: "Êtes-vous sûr ?",
+                        class: "btn btn-outline-danger btn-sm" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <div class="alert alert-info">
+    <p>Aucune tâche dans ce projet. Commencez par en créer une !</p>
+  </div>
+<% end %>
+
+<div class="mt-4">
+  <%= link_to "← Retour aux projets", projects_path, class: "btn btn-secondary" %>
+</div>
