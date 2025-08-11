@@ -23,6 +23,12 @@
     <%= form.text_area :description, rows: 3, class: "form-control" %>
   </div>
 
+  <div class="mb-3">
+    <%= form.label :due_date, "Date limite", class: "form-label" %>
+    <%= form.date_field :due_date, class: "form-control" %>
+  </div>
+
+
   <div class="col-12">
     <%= form.submit "Créer la tâche", class: "btn btn-success" %>
     <%= link_to "Retour au projet", @project, class: "btn btn-secondary" %>
