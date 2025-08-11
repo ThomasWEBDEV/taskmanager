@@ -11,7 +11,7 @@
             <h5 class="card-title"><%= project.title %></h5>
             <p class="card-text"><%= project.description %></p>
             <p class="text-muted small">
-              <%= pluralize(project.tasks.completed.count, 'tâche terminée') %> sur
+              <%= pluralize(project.tasks.where(completed: true).count, 'tâche terminée') %> sur
               <%= pluralize(project.tasks.count, 'tâche') %>
             </p>
             <%= link_to "Voir", project, class: "btn btn-outline-primary btn-sm" %>
