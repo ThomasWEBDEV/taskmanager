@@ -2,7 +2,14 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @tasks = current_user.tasks
+    @tasks = current_user.tasks.includes(:project)
+
+    case params[:status]
+    when 'pending'
+      @tasks = @tasks.where(completed: false)
+    when 'completed'
+      @tasks = @tasks.where(completed: true)
+    end
   end
 
   def show
