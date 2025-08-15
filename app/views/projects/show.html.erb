@@ -28,6 +28,9 @@
         <div class="d-flex justify-content-between align-items-center">
           <div>
             <h6 class="mb-1">
+              <% if task.created_at > 1.day.ago %>
+                <span class="badge bg-info me-1">Nouveau</span>
+              <% end %>
               <% if task.completed %>
                 <span class="badge bg-success me-2">Terminé</span>
               <% else %>
