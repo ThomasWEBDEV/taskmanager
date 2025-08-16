@@ -31,6 +31,12 @@
               <% if task.created_at > 1.day.ago %>
                 <span class="badge bg-info me-1">Nouveau</span>
               <% end %>
+              <% case task.priority %>
+              <% when 'urgent' %>
+                <span class="badge bg-danger me-1">🔥 Urgent</span>
+              <% when 'high' %>
+                <span class="badge bg-warning me-1">⚡ Important</span>
+              <% end %>
               <% if task.completed %>
                 <span class="badge bg-success me-2">Terminé</span>
               <% else %>
