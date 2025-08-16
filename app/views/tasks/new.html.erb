@@ -28,6 +28,17 @@
     <%= form.date_field :due_date, class: "form-control" %>
   </div>
 
+  <div class="mb-3">
+  <%= form.label :priority, "Priorité", class: "form-label" %>
+  <%= form.select :priority,
+      options_for_select([
+        ['Normale', 'normal'],
+        ['Importante', 'high'],
+        ['Urgente', 'urgent']
+      ], 'normal'),
+      {},
+      { class: "form-select" } %>
+  </div>
 
   <div class="col-12">
     <%= form.submit "Créer la tâche", class: "btn btn-success" %>
