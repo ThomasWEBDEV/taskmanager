@@ -4,6 +4,11 @@ class TasksController < ApplicationController
   def index
     @tasks = current_user.tasks.includes(:project)
 
+    if params[:search].present?
+      @tasks = @tasks.where("title ILIKE ? OR description ILIKE ?",
+                          "%#{params[:search]}%", "%#{params[:search]}%")
+    end
+
     case params[:status]
     when 'pending'
       @tasks = @tasks.where(completed: false)
