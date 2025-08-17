@@ -1,5 +1,13 @@
 <h1>Mes Tâches</h1>
 
+<%= form_with url: tasks_path, method: :get, local: true, class: "mb-4" do |form| %>
+  <div class="input-group">
+    <%= form.text_field :search, placeholder: "Rechercher une tâche...",
+                        value: params[:search], class: "form-control" %>
+    <button class="btn btn-outline-secondary" type="submit">🔍</button>
+  </div>
+<% end %>
+
 <div class="mb-3">
   <%= link_to "Toutes", tasks_path, class: "btn btn-outline-secondary #{'active' if params[:status].blank?}" %>
   <%= link_to "En cours", tasks_path(status: 'pending'), class: "btn btn-outline-warning #{'active' if params[:status] == 'pending'}" %>
