@@ -1,0 +1,174 @@
+/* === COMPOSANTS MODERNES === */
+
+/* Cards glassmorphism */
+.glass-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-smooth);
+  overflow: hidden;
+  position: relative;
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  background: var(--glass-hover) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Task cards spécifiques */
+.task-card {
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  border-left: 4px solid transparent;
+}
+
+.task-card:hover {
+  transform: translateY(-4px) translateX(4px);
+  border-left-color: var(--primary);
+}
+
+.task-card.completed {
+  opacity: 0.8;
+  border-left-color: var(--success);
+}
+
+.task-card.urgent {
+  border-left-color: var(--danger);
+}
+
+.task-card.high {
+  border-left-color: var(--warning);
+}
+
+/* Progress bars modernes */
+.progress-modern {
+  height: 8px;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progress-modern .progress-bar {
+  background: var(--gradient-success);
+  border-radius: var(--radius-xl);
+  transition: width 0.8s ease;
+}
+
+/* Badges modernes */
+.badge-modern {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-xl);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-modern.bg-primary {
+  background: var(--gradient-primary) !important;
+  color: white;
+}
+
+.badge-modern.bg-success {
+  background: var(--gradient-success) !important;
+  color: #000;
+}
+
+.badge-modern.bg-warning {
+  background: var(--gradient-warning) !important;
+  color: #000;
+}
+
+.badge-modern.bg-danger {
+  background: var(--gradient-danger) !important;
+  color: #000;
+}
+
+.badge-modern.bg-info {
+  background: var(--gradient-info) !important;
+  color: #000;
+}
+
+/* Alerts modernes */
+.alert-modern {
+  border: none;
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  border-left: 4px solid;
+  position: relative;
+  overflow: hidden;
+}
+
+.alert-modern.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-left-color: var(--success);
+  color: #d1fae5;
+}
+
+.alert-modern.alert-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-left-color: var(--danger);
+  color: #fecaca;
+}
+
+.alert-modern.alert-info {
+  background: rgba(6, 182, 212, 0.1);
+  border-left-color: var(--info);
+  color: #cffafe;
+}
+
+/* Navigation moderne */
+.navbar-modern {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 1rem 0;
+}
+
+.navbar-brand-modern {
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Statistiques cards */
+.stats-card {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-smooth);
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.stats-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.stats-card h4 {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.stats-card .label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

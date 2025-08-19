@@ -1,0 +1,144 @@
+/* === LAYOUT MODERNE === */
+
+/* Container principal */
+.main-container {
+  min-height: calc(100vh - 80px);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* Navigation */
+.navbar-custom {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-brand-custom {
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-decoration: none !important;
+}
+
+.navbar-brand-custom:hover {
+  opacity: 0.8;
+}
+
+.nav-link-custom {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
+}
+
+.nav-link-custom:hover {
+  color: var(--text-primary) !important;
+  background: var(--glass-hover);
+}
+
+/* User info */
+.user-info {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 1rem;
+}
+
+/* Footer moderne */
+.footer-custom {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--glass-border);
+  padding: 1.5rem 0;
+  margin-top: auto;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.footer-custom p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Ajustement du body pour le footer fixe */
+body {
+  padding-bottom: 80px;
+}
+
+/* Page headers */
+.page-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.page-header .subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+/* Grid responsive */
+.responsive-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* Spacing utilitaires */
+.section-spacing {
+  margin: 3rem 0;
+}
+
+.card-spacing {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem;
+  }
+
+  .navbar-custom {
+    padding: 0.5rem 0;
+  }
+
+  .navbar-brand-custom {
+    font-size: 1.25rem;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

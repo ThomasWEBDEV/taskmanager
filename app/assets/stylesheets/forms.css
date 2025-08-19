@@ -1,0 +1,92 @@
+/* === FORMULAIRES MODERNES === */
+
+/* Champs de formulaire */
+.form-control, .form-select {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--glass-border) !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(10px) !important;
+  color: var(--text-primary) !important;
+  padding: 0.875rem 1rem !important;
+  transition: var(--transition-smooth) !important;
+  font-size: 1rem !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
+  background: var(--glass-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.8;
+}
+
+/* Labels de formulaire */
+.form-label {
+  font-weight: 500 !important;
+  color: var(--text-secondary) !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.025em !important;
+}
+
+/* Input groups */
+.input-group .form-control {
+  border-right: none !important;
+}
+
+.input-group .btn {
+  border-left: none !important;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-secondary) !important;
+}
+
+.input-group .btn:hover {
+  background: var(--glass-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Conteneurs de formulaire */
+.form-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* Groupes de boutons de filtre */
+.filter-buttons .btn {
+  border-radius: var(--radius-md) !important;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.filter-buttons .btn.active {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Champs de recherche spéciaux */
+.search-input {
+  position: relative;
+}
+
+.search-input .form-control {
+  padding-left: 2.5rem !important;
+}
+
+.search-input::before {
+  content: '🔍';
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  color: var(--text-muted);
+}

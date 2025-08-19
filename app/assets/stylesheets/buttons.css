@@ -1,0 +1,155 @@
+/* === BOUTONS MODERNES === */
+
+/* Style de base pour tous les boutons */
+.btn {
+  border-radius: var(--radius-md) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.025em !important;
+  transition: var(--transition-smooth) !important;
+  border: none !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Effet de brillance sur hover */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* Boutons modernes avec dégradés */
+.btn-modern {
+  padding: 0.75rem 1.5rem !important;
+  border-radius: var(--radius-xl) !important;
+  text-transform: uppercase !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.btn-primary {
+  background: var(--gradient-primary) !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+  color: white !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6) !important;
+  color: white !important;
+}
+
+.btn-success {
+  background: var(--gradient-success) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6) !important;
+  color: #000 !important;
+}
+
+.btn-warning {
+  background: var(--gradient-warning) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
+}
+
+.btn-warning:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.6) !important;
+  color: #000 !important;
+}
+
+.btn-danger {
+  background: var(--gradient-danger) !important;
+  color: #000 !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.6) !important;
+  color: #000 !important;
+}
+
+/* Boutons outline modernes */
+.btn-outline-primary {
+  border: 2px solid var(--primary) !important;
+  background: var(--glass-bg) !important;
+  color: var(--primary) !important;
+  backdrop-filter: blur(10px);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.btn-outline-secondary {
+  border: 2px solid var(--glass-border) !important;
+  background: var(--glass-bg) !important;
+  color: var(--text-secondary) !important;
+  backdrop-filter: blur(10px);
+}
+
+.btn-outline-secondary:hover {
+  background: var(--glass-hover) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-2px);
+}
+
+.btn-outline-success {
+  border: 2px solid var(--success) !important;
+  background: var(--glass-bg) !important;
+  color: var(--success) !important;
+  backdrop-filter: blur(10px);
+}
+
+.btn-outline-success:hover {
+  background: var(--success) !important;
+  color: #000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+.btn-outline-danger {
+  border: 2px solid var(--danger) !important;
+  background: var(--glass-bg) !important;
+  color: var(--danger) !important;
+  backdrop-filter: blur(10px);
+}
+
+.btn-outline-danger:hover {
+  background: var(--danger) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* Boutons petits */
+.btn-sm {
+  padding: 0.5rem 1rem !important;
+  font-size: 0.75rem !important;
+}
+
+/* Boutons larges */
+.btn-lg {
+  padding: 1rem 2rem !important;
+  font-size: 1rem !important;
+}
