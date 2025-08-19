@@ -1,33 +1,157 @@
-<h1>Mes Projets</h1>
+<div class="fade-in-up">
+  <!-- Header avec titre moderne -->
+  <div class="page-header">
+    <h1 class="display-4">
+      <i class="fas fa-rocket me-3"></i>
+      Mes Projets
+    </h1>
+    <p class="subtitle">Gérez vos projets avec efficacité</p>
+  </div>
 
-<%= link_to "Nouveau Projet", new_project_path, class: "btn btn-primary mb-3" %>
-
-<% if @projects.any? %>
-  <div class="row">
-    <% @projects.each do |project| %>
-      <div class="col-md-6 mb-3">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title"><%= project.title %></h5>
-            <p class="card-text"><%= project.description %></p>
-            <p class="text-muted small">
-              <%= pluralize(project.tasks.where(completed: true).count, 'tâche terminée') %> sur
-              <%= pluralize(project.tasks.count, 'tâche') %>
-            </p>
-            <%= link_to "Voir", project, class: "btn btn-outline-primary btn-sm" %>
-            <%= link_to "Modifier", edit_project_path(project), class: "btn btn-outline-secondary btn-sm" %>
-            <%= button_to "Supprimer", project,
-              method: :delete,
-              confirm: "Êtes-vous sûr ?",
-              class: "btn btn-outline-danger btn-sm" %>
-          </div>
-        </div>
+  <!-- Statistiques rapides -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-folder-open icon" style="color: #667eea;"></i>
+        <h4><%= @projects.count %></h4>
+        <div class="label">Projets</div>
       </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-tasks icon" style="color: #84fab0;"></i>
+        <h4><%= current_user.tasks.count %></h4>
+        <div class="label">Tâches totales</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-check-circle icon" style="color: #ffecd2;"></i>
+        <h4><%= current_user.tasks.where(completed: true).count %></h4>
+        <div class="label">Terminées</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-clock icon" style="color: #ff9a9e;"></i>
+        <h4><%= current_user.tasks.where(completed: false).count %></h4>
+        <div class="label">En cours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton d'action principal -->
+  <div class="text-center mb-5">
+    <%= link_to new_project_path, class: "btn btn-primary btn-modern btn-lg" do %>
+      <i class="fas fa-plus me-2"></i>
+      Nouveau Projet
     <% end %>
   </div>
-<% else %>
-  <div class="alert alert-info">
-    <h4>Aucun projet</h4>
-    <p>Commencez par créer votre premier projet !</p>
-  </div>
-<% end %>
+
+  <!-- Liste des projets -->
+  <% if @projects.any? %>
+    <div class="responsive-grid">
+      <% @projects.each_with_index do |project, index| %>
+        <div class="fade-in-up" style="animation-delay: <%= index * 0.1 %>s;">
+          <div class="glass-card card-spacing">
+            <div class="card-body p-4">
+              <!-- Header du projet -->
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="flex-grow-1">
+                  <h5 class="card-title mb-2 fw-bold">
+                    <i class="fas fa-folder me-2" style="color: #667eea;"></i>
+                    <%= project.title %>
+                  </h5>
+
+                  <!-- Calcul des statistiques du projet -->
+                  <% total_tasks = project.tasks.count %>
+                  <% completed_tasks = project.tasks.where(completed: true).count %>
+                  <% progress = total_tasks > 0 ? (completed_tasks.to_f / total_tasks * 100).round : 0 %>
+
+                  <!-- Barre de progression moderne -->
+                  <div class="progress-modern mb-2">
+                    <div class="progress-bar" style="width: <%= progress %>%"></div>
+                  </div>
+
+                  <small class="text-muted">
+                    <%= progress %>% terminé • <%= pluralize(completed_tasks, 'tâche terminée') %> sur <%= pluralize(total_tasks, 'tâche') %>
+                  </small>
+                </div>
+
+                <!-- Indicateurs de priorité -->
+                <div class="ms-3">
+                  <% if project.tasks.where(priority: 'urgent').any? %>
+                    <span class="badge badge-modern bg-danger">
+                      <i class="fas fa-fire me-1"></i>Urgent
+                    </span>
+                  <% elsif project.tasks.where(priority: 'high').any? %>
+                    <span class="badge badge-modern bg-warning">
+                      <i class="fas fa-bolt me-1"></i>Important
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <p class="card-text text-muted mb-4">
+                <%= truncate(project.description, length: 120) %>
+              </p>
+
+              <!-- Statistiques en grille -->
+              <div class="row g-2 mb-4">
+                <div class="col-6">
+                  <div class="text-center p-2 rounded" style="background: rgba(132, 250, 176, 0.1);">
+                    <small class="d-block text-muted">Terminées</small>
+                    <strong style="color: #84fab0;"><%= completed_tasks %></strong>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="text-center p-2 rounded" style="background: rgba(255, 236, 210, 0.1);">
+                    <small class="d-block text-muted">En cours</small>
+                    <strong style="color: #ffecd2;"><%= total_tasks - completed_tasks %></strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="d-flex gap-2 flex-wrap">
+                <%= link_to project, class: "btn btn-primary btn-sm flex-fill" do %>
+                  <i class="fas fa-eye me-1"></i> Voir
+                <% end %>
+
+                <%= link_to edit_project_path(project), class: "btn btn-outline-secondary btn-sm" do %>
+                  <i class="fas fa-edit"></i>
+                <% end %>
+
+                <%= button_to project,
+                    method: :delete,
+                    data: {
+                      confirm: "Supprimer ce projet et toutes ses tâches ?"
+                    },
+                    class: "btn btn-outline-danger btn-sm" do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- État vide moderne -->
+    <div class="text-center section-spacing">
+      <div class="glass-card p-5 mx-auto" style="max-width: 500px;">
+        <i class="fas fa-folder-plus fa-4x mb-4" style="color: #667eea; opacity: 0.6;"></i>
+        <h3 class="mb-3">Aucun projet</h3>
+        <p class="text-muted mb-4">
+          Commencez votre aventure en créant votre premier projet !
+          Organisez vos tâches et atteignez vos objectifs.
+        </p>
+        <%= link_to new_project_path, class: "btn btn-primary btn-modern btn-lg" do %>
+          <i class="fas fa-rocket me-2"></i>
+          Créer mon premier projet
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
