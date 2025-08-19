@@ -1,72 +1,217 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1><%= @project.title %></h1>
-  <div>
-    <%= link_to "Modifier", edit_project_path(@project), class: "btn btn-outline-secondary" %>
-    <%= button_to "Supprimer", @project,
-              method: :delete,
-              confirm: "Êtes-vous sûr ?",
-              class: "btn btn-outline-danger" %>
-  </div>
-</div>
+<div class="fade-in-up">
+  <!-- Breadcrumb moderne -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <%= link_to projects_path, class: "text-decoration-none" do %>
+          <i class="fas fa-home me-1"></i>
+          Mes Projets
+        <% end %>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @project.title %></li>
+    </ol>
+  </nav>
 
-<div class="mb-4">
-  <h5>Description :</h5>
-  <p><%= @project.description %></p>
-</div>
+  <!-- Header du projet -->
+  <div class="glass-card p-4 mb-5">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h1 class="mb-3">
+          <i class="fas fa-folder-open me-3"></i>
+          <%= @project.title %>
+        </h1>
 
-<hr>
+        <p class="text-muted mb-3 fs-5">
+          <%= @project.description %>
+        </p>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3>Tâches du projet</h3>
-  <%= link_to "Nouvelle Tâche", new_project_task_path(@project), class: "btn btn-success" %>
-</div>
+        <!-- Barre de progression globale -->
+        <% total_tasks = @tasks.count %>
+        <% completed_tasks = @tasks.where(completed: true).count %>
+        <% progress = total_tasks > 0 ? (completed_tasks.to_f / total_tasks * 100).round : 0 %>
 
-<% if @tasks.any? %>
-  <% @tasks.each do |task| %>
-    <div class="card mb-2">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="mb-1">
-              <% if task.created_at > 1.day.ago %>
-                <span class="badge bg-info me-1">Nouveau</span>
-              <% end %>
-              <% case task.priority %>
-              <% when 'urgent' %>
-                <span class="badge bg-danger me-1">🔥 Urgent</span>
-              <% when 'high' %>
-                <span class="badge bg-warning me-1">⚡ Important</span>
-              <% end %>
-              <% if task.completed %>
-                <span class="badge bg-success me-2">Terminé</span>
-              <% else %>
-                <span class="badge bg-warning me-2">En cours</span>
-              <% end %>
-              <%= task.title %>
-            </h6>
-            <p class="mb-1 text-muted"><%= task.description %></p>
+        <div class="d-flex align-items-center">
+          <div class="progress-modern flex-grow-1 me-3" style="height: 12px;">
+            <div class="progress-bar" style="width: <%= progress %>%"></div>
           </div>
-          <div>
-            <%= link_to "Voir", task, class: "btn btn-outline-primary btn-sm" %>
-            <% unless task.completed %>
-              <%= link_to "Terminer", task, method: :patch,
-                          class: "btn btn-outline-success btn-sm" %>
-            <% end %>
-            <%= button_to "Supprimer", task,
+          <span class="badge badge-modern bg-info"><%= progress %>% terminé</span>
+        </div>
+      </div>
+
+      <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+        <div class="d-flex flex-column gap-2">
+          <%= link_to edit_project_path(@project), class: "btn btn-outline-secondary btn-modern" do %>
+            <i class="fas fa-edit me-2"></i>Modifier
+          <% end %>
+
+          <%= button_to @project,
               method: :delete,
-              confirm: "Êtes-vous sûr ?",
-              class: "btn btn-outline-danger btn-sm" %>
-          </div>
+              data: { confirm: "Supprimer ce projet et toutes ses tâches ?" },
+              class: "btn btn-outline-danger btn-modern" do %>
+            <i class="fas fa-trash me-2"></i>Supprimer
+          <% end %>
         </div>
       </div>
     </div>
-  <% end %>
-<% else %>
-  <div class="alert alert-info">
-    <p>Aucune tâche dans ce projet. Commencez par en créer une !</p>
   </div>
-<% end %>
 
-<div class="mt-4">
-  <%= link_to "← Retour aux projets", projects_path, class: "btn btn-secondary" %>
+  <!-- Statistiques du projet -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-tasks icon" style="color: #667eea;"></i>
+        <h4><%= @tasks.count %></h4>
+        <div class="label">Total</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-check-circle icon" style="color: #84fab0;"></i>
+        <h4><%= @tasks.where(completed: true).count %></h4>
+        <div class="label">Terminées</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-clock icon" style="color: #ffecd2;"></i>
+        <h4><%= @tasks.where(completed: false).count %></h4>
+        <div class="label">En cours</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="stats-card">
+        <i class="fas fa-fire icon" style="color: #ff9a9e;"></i>
+        <h4><%= @tasks.where(priority: 'urgent').count %></h4>
+        <div class="label">Urgentes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header des tâches -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="mb-0">
+      <i class="fas fa-list-check me-2"></i>
+      Tâches du projet
+    </h3>
+    <%= link_to new_project_task_path(@project), class: "btn btn-success btn-modern" do %>
+      <i class="fas fa-plus me-2"></i>Nouvelle Tâche
+    <% end %>
+  </div>
+
+  <!-- Liste des tâches -->
+  <% if @tasks.any? %>
+    <div class="row g-3">
+      <% @tasks.each_with_index do |task, index| %>
+        <div class="col-12 fade-in-up" style="animation-delay: <%= index * 0.1 %>s;">
+          <div class="glass-card task-card <%= 'completed' if task.completed %> <%= task.priority if task.priority.present? %>">
+            <div class="card-body p-4">
+              <div class="row align-items-center">
+                <!-- Contenu de la tâche -->
+                <div class="col-lg-8">
+                  <div class="d-flex align-items-start mb-2">
+                    <div class="flex-grow-1">
+                      <!-- Badges de statut et priorité -->
+                      <div class="mb-2">
+                        <% if task.created_at > 1.day.ago %>
+                          <span class="badge badge-modern bg-info me-1">
+                            <i class="fas fa-star me-1"></i>Nouveau
+                          </span>
+                        <% end %>
+
+                        <% case task.priority %>
+                        <% when 'urgent' %>
+                          <span class="badge badge-modern bg-danger me-1">
+                            <i class="fas fa-fire me-1"></i>Urgent
+                          </span>
+                        <% when 'high' %>
+                          <span class="badge badge-modern bg-warning me-1">
+                            <i class="fas fa-bolt me-1"></i>Important
+                          </span>
+                        <% end %>
+
+                        <% if task.completed %>
+                          <span class="badge badge-modern bg-success me-1">
+                            <i class="fas fa-check me-1"></i>Terminé
+                          </span>
+                        <% else %>
+                          <span class="badge badge-modern bg-warning me-1">
+                            <i class="fas fa-clock me-1"></i>En cours
+                          </span>
+                        <% end %>
+                      </div>
+
+                      <!-- Titre de la tâche -->
+                      <h5 class="mb-2 <%= 'text-decoration-line-through text-muted' if task.completed %>">
+                        <%= task.title %>
+                      </h5>
+
+                      <!-- Description -->
+                      <p class="text-muted mb-2">
+                        <%= truncate(task.description, length: 100) %>
+                      </p>
+
+                      <!-- Métadonnées -->
+                      <div class="d-flex gap-3 text-muted small">
+                        <span>
+                          <i class="fas fa-user me-1"></i>
+                          <%= task.user.email.split('@').first.capitalize %>
+                        </span>
+                        <% if task.due_date %>
+                          <span class="<%= 'text-danger' if task.due_date < Date.current && !task.completed %>">
+                            <i class="fas fa-calendar me-1"></i>
+                            <%= task.due_date.strftime("%d/%m/%Y") %>
+                          </span>
+                        <% end %>
+                        <span>
+                          <i class="fas fa-plus me-1"></i>
+                          <%= time_ago_in_words(task.created_at) %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                  <div class="d-flex gap-2 justify-content-lg-end flex-wrap">
+                    <%= link_to task, class: "btn btn-outline-primary btn-sm" do %>
+                      <i class="fas fa-eye"></i>
+                    <% end %>
+
+                    <% unless task.completed %>
+                      <%= link_to task, method: :patch,
+                          class: "btn btn-success btn-sm" do %>
+                        <i class="fas fa-check"></i>
+                      <% end %>
+                    <% end %>
+
+                    <%= button_to task,
+                        method: :delete,
+                        data: { confirm: "Supprimer cette tâche ?" },
+                        class: "btn btn-outline-danger btn-sm" do %>
+                      <i class="fas fa-trash"></i>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- État vide -->
+    <div class="text-center section-spacing">
+      <div class="glass-card p-5 mx-auto" style="max-width: 400px;">
+        <i class="fas fa-tasks fa-3x mb-3" style="color: #667eea; opacity: 0.6;"></i>
+        <h4 class="mb-3">Aucune tâche</h4>
+        <p class="text-muted mb-4">
+          Ce projet n'a pas encore de tâches. Commencez par en créer une !
+        </p>
+        <%= link_to new_project_task_path(@project), class: "btn btn-success btn-modern" do %>
+          <i class="fas fa-plus me-2"></i>Première tâche
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
