@@ -40,6 +40,14 @@
       { class: "form-select" } %>
   </div>
 
+  <div class="mb-3">
+  <%= form.label :notes, "Notes personnelles", class: "form-label" %>
+  <%= form.text_area :notes, rows: 3,
+      placeholder: "Ajoutez vos notes, idées ou rappels...",
+      class: "form-control" %>
+  <div class="form-text">Notes privées visibles seulement par vous</div>
+  </div>
+
   <div class="col-12">
     <%= form.submit "Créer la tâche", class: "btn btn-success" %>
     <%= link_to "Retour au projet", @project, class: "btn btn-secondary" %>

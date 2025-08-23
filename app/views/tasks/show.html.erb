@@ -25,6 +25,16 @@
     <h5 class="card-title">Description :</h5>
     <p class="card-text"><%= @task.description %></p>
 
+    <% if @task.notes.present? %>
+      <div class="glass-card p-3 mt-3" style="background: rgba(255, 220, 120, 0.1); border-left: 4px solid #ffecd2;">
+        <h6 class="mb-2">
+          <i class="fas fa-sticky-note me-2" style="color: #ffecd2;"></i>
+          Mes notes
+        </h6>
+        <p class="mb-0 text-muted"><%= simple_format(@task.notes) %></p>
+      </div>
+    <% end %>
+
     <hr>
 
     <div class="row">
