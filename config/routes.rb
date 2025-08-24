@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   root to: 'projects#index'
 
   resources :projects do
+    member do
+      patch :complete_all_tasks
+    end
     resources :tasks, only: [:new, :create]
   end
 
