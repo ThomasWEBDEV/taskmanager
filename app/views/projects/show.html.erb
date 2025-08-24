@@ -45,14 +45,13 @@
             <% end %>
 
             <% if @tasks.where(completed: false).any? %>
-              <%= link_to complete_all_tasks_project_path(@project),
+              <%= button_to complete_all_tasks_project_path(@project),
                   method: :patch,
                   data: { confirm: "Marquer toutes les tâches non terminées comme terminées ?" },
                   class: "btn btn-success btn-modern" do %>
                 <i class="fas fa-check-double me-2"></i>Terminer tout (<%= @tasks.where(completed: false).count %>)
               <% end %>
             <% end %>
-
             <%= button_to @project,
                 method: :delete,
                 data: { confirm: "Supprimer ce projet et toutes ses tâches ?" },
