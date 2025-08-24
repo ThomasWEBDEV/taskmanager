@@ -42,6 +42,13 @@ class ProjectsController < ApplicationController
     redirect_to projects_path
   end
 
+  def complete_all_tasks
+    @project = current_user.projects.find(params[:id])
+    @project.tasks.where(completed: false).update_all(completed: true)
+
+    redirect_to @project, notice: "Toutes les tâches ont été marquées comme terminées ! 🎉"
+  end
+
   private
 
   def project_params
