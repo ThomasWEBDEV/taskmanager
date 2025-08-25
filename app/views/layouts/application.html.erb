@@ -82,22 +82,50 @@
 
     <!-- Contenu principal -->
     <div class="container main-container">
-      <!-- Notifications améliorées -->
-      <% if notice %>
-        <div class="alert alert-success alert-modern alert-dismissible fade show" role="alert">
-          <i class="fas fa-check-circle me-2"></i>
-          <%= notice %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      <% end %>
+      <!-- Container pour les toasts -->
+      <div class="toast-container">
+        <% if notice %>
+          <div class="modern-toast success"
+               data-controller="toast"
+               data-action="mouseenter->toast#pause mouseleave->toast#resume"
+               role="alert">
+            <div class="toast-body">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-check-circle me-3 text-success fs-5"></i>
+                <div class="flex-grow-1">
+                  <%= notice %>
+                </div>
+                <button type="button"
+                        class="btn-close btn-close-white ms-3"
+                        data-action="click->toast#close"
+                        aria-label="Close"></button>
+              </div>
+            </div>
+            <div class="toast-progress" data-toast-target="progress"></div>
+          </div>
+        <% end %>
 
-      <% if alert %>
-        <div class="alert alert-danger alert-modern alert-dismissible fade show" role="alert">
-          <i class="fas fa-exclamation-triangle me-2"></i>
-          <%= alert %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-      <% end %>
+        <% if alert %>
+          <div class="modern-toast error"
+               data-controller="toast"
+               data-action="mouseenter->toast#pause mouseleave->toast#resume"
+               role="alert">
+            <div class="toast-body">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-3 text-danger fs-5"></i>
+                <div class="flex-grow-1">
+                  <%= alert %>
+                </div>
+                <button type="button"
+                        class="btn-close btn-close-white ms-3"
+                        data-action="click->toast#close"
+                        aria-label="Close"></button>
+              </div>
+            </div>
+            <div class="toast-progress" data-toast-target="progress"></div>
+          </div>
+        <% end %>
+      </div>
 
       <!-- Contenu de la page -->
       <%= yield %>
