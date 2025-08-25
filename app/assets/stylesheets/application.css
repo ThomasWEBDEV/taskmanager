@@ -8,12 +8,11 @@
  *= require buttons
  *= require forms
  *= require layout
- *= require_self
  *= require toasts
+ *= require_self
  */
 
 /* Styles globaux de l'application */
-
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
