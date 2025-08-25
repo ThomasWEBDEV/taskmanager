@@ -1,0 +1,113 @@
+/* === TOASTS MODERNES === */
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  max-width: 400px;
+}
+
+.modern-toast {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 1rem;
+  animation: slideInRight 0.4s ease-out;
+  overflow: hidden;
+  position: relative;
+}
+
+.modern-toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.modern-toast.success::before {
+  background: var(--gradient-success);
+}
+
+.modern-toast.error::before {
+  background: var(--gradient-danger);
+}
+
+.modern-toast.info::before {
+  background: var(--gradient-info);
+}
+
+.toast-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+.toast-body {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  padding: 1rem 1.5rem !important;
+}
+
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  animation: progressBar 4s linear forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.modern-toast.hiding {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .toast-container {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+
+  .modern-toast {
+    margin-bottom: 0.5rem;
+  }
+}
