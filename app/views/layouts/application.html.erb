@@ -23,17 +23,13 @@
     <%= javascript_importmap_tags %>
   </head>
 
-    <!-- TEST TOAST VISIBLE -->
-  <div style="position: fixed; top: 20px; right: 20px; background: red; color: white; padding: 20px; z-index: 9999;">
-    TOAST TEST - SI VOUS VOYEZ CECI, LE CSS MARCHE
-  </div>
   <body>
     <!-- Navigation moderne -->
     <nav class="navbar navbar-expand-lg navbar-custom">
       <div class="container">
         <%= link_to root_path, class: "navbar-brand navbar-brand-custom" do %>
           <i class="fas fa-tasks me-2"></i>
-          TaskManager
+          TaskManager Pro
         <% end %>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -46,23 +42,23 @@
               <!-- Informations utilisateur -->
               <span class="user-info">
                 <i class="fas fa-user-circle me-1"></i>
-                Bonjour <%= current_user.email.split('@').first.capitalize %>
+                <%= current_user.email.split('@').first.capitalize %>
               </span>
 
               <!-- Navigation principale -->
               <%= link_to projects_path, class: "nav-link nav-link-custom" do %>
                 <i class="fas fa-folder me-1"></i>
-                Mes Projets
+                Projets
               <% end %>
 
               <%= link_to tasks_path, class: "nav-link nav-link-custom" do %>
                 <i class="fas fa-list-check me-1"></i>
-                Mes Tâches
+                Tâches
               <% end %>
 
               <!-- Déconnexion -->
-              <%= link_to destroy_user_session_path,
-                  data: { "turbo-method": :delete },
+              <%= button_to destroy_user_session_path,
+                  method: :delete,
                   class: "btn btn-outline-danger btn-sm ms-3" do %>
                 <i class="fas fa-sign-out-alt me-1"></i>
                 Déconnexion
@@ -84,54 +80,55 @@
       </div>
     </nav>
 
+    <!-- Container pour les toasts -->
+    <div class="toast-container">
+      <% if notice.present? %>
+        <div class="modern-toast success"
+             data-controller="toast"
+             data-action="mouseenter->toast#pause mouseleave->toast#resume"
+             role="alert"
+             aria-live="polite">
+          <div class="toast-body">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-check-circle me-3 text-success fs-5"></i>
+              <div class="flex-grow-1">
+                <%= notice %>
+              </div>
+              <button type="button"
+                      class="btn-close btn-close-white ms-3"
+                      data-action="click->toast#close"
+                      aria-label="Fermer"></button>
+            </div>
+          </div>
+          <div class="toast-progress" data-toast-target="progress"></div>
+        </div>
+      <% end %>
+
+      <% if alert.present? %>
+        <div class="modern-toast error"
+             data-controller="toast"
+             data-action="mouseenter->toast#pause mouseleave->toast#resume"
+             role="alert"
+             aria-live="assertive">
+          <div class="toast-body">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-exclamation-triangle me-3 text-danger fs-5"></i>
+              <div class="flex-grow-1">
+                <%= alert %>
+              </div>
+              <button type="button"
+                      class="btn-close btn-close-white ms-3"
+                      data-action="click->toast#close"
+                      aria-label="Fermer"></button>
+            </div>
+          </div>
+          <div class="toast-progress" data-toast-target="progress"></div>
+        </div>
+      <% end %>
+    </div>
+
     <!-- Contenu principal -->
     <div class="container main-container">
-      <!-- Container pour les toasts -->
-      <div class="toast-container">
-        <% if notice %>
-          <div class="modern-toast success"
-               data-controller="toast"
-               data-action="mouseenter->toast#pause mouseleave->toast#resume"
-               role="alert">
-            <div class="toast-body">
-              <div class="d-flex align-items-center">
-                <i class="fas fa-check-circle me-3 text-success fs-5"></i>
-                <div class="flex-grow-1">
-                  <%= notice %>
-                </div>
-                <button type="button"
-                        class="btn-close btn-close-white ms-3"
-                        data-action="click->toast#close"
-                        aria-label="Close"></button>
-              </div>
-            </div>
-            <div class="toast-progress" data-toast-target="progress"></div>
-          </div>
-        <% end %>
-
-        <% if alert %>
-          <div class="modern-toast error"
-               data-controller="toast"
-               data-action="mouseenter->toast#pause mouseleave->toast#resume"
-               role="alert">
-            <div class="toast-body">
-              <div class="d-flex align-items-center">
-                <i class="fas fa-exclamation-triangle me-3 text-danger fs-5"></i>
-                <div class="flex-grow-1">
-                  <%= alert %>
-                </div>
-                <button type="button"
-                        class="btn-close btn-close-white ms-3"
-                        data-action="click->toast#close"
-                        aria-label="Close"></button>
-              </div>
-            </div>
-            <div class="toast-progress" data-toast-target="progress"></div>
-          </div>
-        <% end %>
-      </div>
-
-      <!-- Contenu de la page -->
       <%= yield %>
     </div>
 
@@ -140,7 +137,7 @@
       <div class="container">
         <p class="mb-0">
           <i class="fas fa-code me-2"></i>
-          © 2025 TaskManager - Gestion moderne de projets et tâches
+          © <%= Date.current.year %> TaskManager Pro - Développé avec passion
         </p>
       </div>
     </footer>
