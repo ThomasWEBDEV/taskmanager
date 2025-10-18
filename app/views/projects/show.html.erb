@@ -26,9 +26,7 @@
         </p>
 
         <!-- Barre de progression globale -->
-        <% total_tasks = @tasks.count %>
-        <% completed_tasks = @tasks.where(completed: true).count %>
-        <% progress = total_tasks > 0 ? (completed_tasks.to_f / total_tasks * 100).round : 0 %>
+        <% progress = @project.completion_percentage %>
 
         <div class="d-flex align-items-center">
           <div class="progress-modern flex-grow-1 me-3" style="height: 12px;">
@@ -39,27 +37,28 @@
       </div>
 
       <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-          <div class="d-flex flex-column gap-2">
-            <%= link_to edit_project_path(@project), class: "btn btn-outline-secondary btn-modern" do %>
-              <i class="fas fa-edit me-2"></i>Modifier
-            <% end %>
+        <div class="d-flex flex-column gap-2">
+          <%= link_to edit_project_path(@project), class: "btn btn-outline-secondary btn-modern" do %>
+            <i class="fas fa-edit me-2"></i>Modifier
+          <% end %>
 
-            <% if @tasks.where(completed: false).any? %>
-              <%= button_to complete_all_tasks_project_path(@project),
-                  method: :patch,
-                  data: { confirm: "Marquer toutes les tâches non terminées comme terminées ?" },
-                  class: "btn btn-success btn-modern" do %>
-                <i class="fas fa-check-double me-2"></i>Terminer tout (<%= @tasks.where(completed: false).count %>)
-              <% end %>
+          <% if @project.pending_tasks_count > 0 %>
+            <%= button_to complete_all_tasks_project_path(@project),
+                method: :patch,
+                data: { confirm: "Marquer toutes les tâches non terminées comme terminées ?" },
+                class: "btn btn-success btn-modern" do %>
+              <i class="fas fa-check-double me-2"></i>Terminer tout (<%= @project.pending_tasks_count %>)
             <% end %>
-            <%= button_to @project,
-                method: :delete,
-                data: { confirm: "Supprimer ce projet et toutes ses tâches ?" },
-                class: "btn btn-outline-danger btn-modern" do %>
-              <i class="fas fa-trash me-2"></i>Supprimer
-            <% end %>
-          </div>
+          <% end %>
+          
+          <%= button_to @project,
+              method: :delete,
+              data: { confirm: "Supprimer ce projet et toutes ses tâches ?" },
+              class: "btn btn-outline-danger btn-modern" do %>
+            <i class="fas fa-trash me-2"></i>Supprimer
+          <% end %>
         </div>
+      </div>
     </div>
   </div>
 
@@ -75,47 +74,62 @@
     <div class="col-md-3 col-sm-6">
       <div class="stats-card">
         <i class="fas fa-check-circle icon" style="color: #84fab0;"></i>
-        <h4><%= @tasks.where(completed: true).count %></h4>
+        <h4><%= @project.completed_tasks_count %></h4>
         <div class="label">Terminées</div>
       </div>
     </div>
     <div class="col-md-3 col-sm-6">
       <div class="stats-card">
         <i class="fas fa-clock icon" style="color: #ffecd2;"></i>
-        <h4><%= @tasks.where(completed: false).count %></h4>
+        <h4><%= @project.pending_tasks_count %></h4>
         <div class="label">En cours</div>
       </div>
     </div>
     <div class="col-md-3 col-sm-6">
       <div class="stats-card">
         <i class="fas fa-fire icon" style="color: #ff9a9e;"></i>
-        <h4><%= @tasks.where(priority: 'urgent').count %></h4>
+        <h4><%= @project.urgent_tasks_count %></h4>
         <div class="label">Urgentes</div>
       </div>
     </div>
   </div>
 
-  <!-- Header des tâches -->
+  <!-- Header des tâches avec mode drag & drop -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h3 class="mb-0">
       <i class="fas fa-list-check me-2"></i>
       Tâches du projet
+      <small class="text-muted ms-2">
+        <i class="fas fa-grip-vertical"></i> Glissez pour réorganiser
+      </small>
     </h3>
     <%= link_to new_project_task_path(@project), class: "btn btn-success btn-modern" do %>
       <i class="fas fa-plus me-2"></i>Nouvelle Tâche
     <% end %>
   </div>
 
-  <!-- Liste des tâches -->
+  <!-- Liste des tâches avec drag & drop -->
   <% if @tasks.any? %>
-    <div class="row g-3">
-      <% @tasks.each_with_index do |task, index| %>
-        <div class="col-12 fade-in-up" style="animation-delay: <%= index * 0.1 %>s;">
-          <div class="glass-card task-card <%= 'completed' if task.completed %> <%= task.priority if task.priority.present? %>">
+    <div class="tasks-container" 
+         data-controller="sortable"
+         data-sortable-url-value="/tasks/:id/reorder">
+      <% @tasks.ordered.each_with_index do |task, index| %>
+        <div class="task-draggable fade-in-up" 
+             style="animation-delay: <%= index * 0.05 %>s;"
+             data-task-id="<%= task.id %>"
+             data-project-id="<%= @project.id %>">
+          <div class="glass-card task-card mb-3 <%= 'completed' if task.completed %> <%= task.priority if task.priority.present? %>">
             <div class="card-body p-4">
               <div class="row align-items-center">
+                <!-- Handle de drag -->
+                <div class="col-auto d-none d-md-block">
+                  <span class="drag-handle">
+                    <i class="fas fa-grip-vertical fa-lg"></i>
+                  </span>
+                </div>
+
                 <!-- Contenu de la tâche -->
-                <div class="col-lg-8">
+                <div class="col">
                   <div class="d-flex align-items-start mb-2">
                     <div class="flex-grow-1">
                       <!-- Badges de statut et priorité -->
@@ -126,20 +140,21 @@
                           </span>
                         <% end %>
 
-                        <% case task.priority %>
-                        <% when 'urgent' %>
-                          <span class="badge badge-modern bg-danger me-1">
-                            <i class="fas fa-fire me-1"></i>Urgent
-                          </span>
-                        <% when 'high' %>
-                          <span class="badge badge-modern bg-warning me-1">
-                            <i class="fas fa-bolt me-1"></i>Important
-                          </span>
-                        <% end %>
+                        <%= content_tag :span, 
+                            task.priority_label, 
+                            class: "badge badge-modern bg-#{task.priority == 'urgent' ? 'danger' : task.priority == 'high' ? 'warning' : 'secondary'} me-1" if task.priority.present? %>
 
                         <% if task.completed %>
                           <span class="badge badge-modern bg-success me-1">
                             <i class="fas fa-check me-1"></i>Terminé
+                          </span>
+                        <% elsif task.overdue? %>
+                          <span class="badge badge-modern bg-danger me-1">
+                            <i class="fas fa-exclamation-triangle me-1"></i>En retard
+                          </span>
+                        <% elsif task.due_today? %>
+                          <span class="badge badge-modern bg-warning me-1">
+                            <i class="fas fa-calendar-day me-1"></i>Aujourd'hui
                           </span>
                         <% else %>
                           <span class="badge badge-modern bg-warning me-1">
@@ -169,10 +184,10 @@
                       <div class="d-flex gap-3 text-muted small">
                         <span>
                           <i class="fas fa-user me-1"></i>
-                          <%= task.user.email.split('@').first.capitalize %>
+                          <%= task.user.display_name %>
                         </span>
                         <% if task.due_date %>
-                          <span class="<%= 'text-danger' if task.due_date < Date.current && !task.completed %>">
+                          <span class="<%= 'text-danger' if task.overdue? %>">
                             <i class="fas fa-calendar me-1"></i>
                             <%= task.due_date.strftime("%d/%m/%Y") %>
                           </span>
@@ -187,14 +202,15 @@
                 </div>
 
                 <!-- Actions -->
-                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                  <div class="d-flex gap-2 justify-content-lg-end flex-wrap">
+                <div class="col-auto">
+                  <div class="d-flex gap-2 flex-wrap">
                     <%= link_to task, class: "btn btn-outline-primary btn-sm" do %>
                       <i class="fas fa-eye"></i>
                     <% end %>
 
                     <% unless task.completed %>
-                      <%= link_to task, method: :patch,
+                      <%= button_to toggle_complete_task_path(task),
+                          method: :patch,
                           class: "btn btn-success btn-sm" do %>
                         <i class="fas fa-check"></i>
                       <% end %>
@@ -202,7 +218,7 @@
 
                     <%= button_to task,
                         method: :delete,
-                        data: { confirm: "Supprimer cette tâche ?" },
+			data: { confirm: "Supprimer cette tâche ?" },
                         class: "btn btn-outline-danger btn-sm" do %>
                       <i class="fas fa-trash"></i>
                     <% end %>
