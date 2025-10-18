@@ -1,0 +1,18 @@
+<div class="modern-toast <%= type %>"
+     data-controller="toast"
+     data-action="mouseenter->toast#pause mouseleave->toast#resume"
+     role="alert">
+  <div class="toast-body">
+    <div class="d-flex align-items-center">
+      <i class="fas fa-<%= type == 'success' ? 'check-circle text-success' : 'exclamation-triangle text-danger' %> me-3 fs-5"></i>
+      <div class="flex-grow-1">
+        <%= message %>
+      </div>
+      <button type="button"
+              class="btn-close btn-close-white ms-3"
+              data-action="click->toast#close"
+              aria-label="Close"></button>
+    </div>
+  </div>
+  <div class="toast-progress" data-toast-target="progress"></div>
+</div>
