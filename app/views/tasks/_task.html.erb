@@ -1,0 +1,88 @@
+<div class="task-draggable" 
+     id="task_<%= task.id %>"
+     data-task-id="<%= task.id %>"
+     data-project-id="<%= task.project_id %>">
+  <div class="glass-card task-card mb-3 <%= 'completed' if task.completed %> <%= task.priority if task.priority.present? %>">
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <!-- Handle de drag -->
+        <div class="col-auto d-none d-md-block">
+          <span class="drag-handle">
+            <i class="fas fa-grip-vertical fa-lg"></i>
+          </span>
+        </div>
+
+        <!-- Contenu de la tâche -->
+        <div class="col">
+          <div class="d-flex align-items-start mb-2">
+            <div class="flex-grow-1">
+              <!-- Badges de statut et priorité -->
+              <div class="mb-2">
+                <%= content_tag :span, 
+                    task.priority_label, 
+                    class: "badge badge-modern bg-#{task.priority == 'urgent' ? 'danger' : task.priority == 'high' ? 'warning' : 'secondary'} me-1" if task.priority.present? %>
+
+                <% if task.completed %>
+                  <span class="badge badge-modern bg-success me-1">
+                    <i class="fas fa-check me-1"></i>Terminé
+                  </span>
+                <% elsif task.overdue? %>
+                  <span class="badge badge-modern bg-danger me-1">
+                    <i class="fas fa-exclamation-triangle me-1"></i>En retard
+                  </span>
+                <% else %>
+                  <span class="badge badge-modern bg-warning me-1">
+                    <i class="fas fa-clock me-1"></i>En cours
+                  </span>
+                <% end %>
+              </div>
+
+              <!-- Titre de la tâche -->
+              <h5 class="mb-2 <%= 'text-decoration-line-through text-muted' if task.completed %>">
+                <%= task.title %>
+              </h5>
+
+              <!-- Description -->
+              <p class="text-muted mb-2">
+                <%= truncate(task.description, length: 100) %>
+              </p>
+
+              <!-- Métadonnées -->
+              <div class="d-flex gap-3 text-muted small">
+                <% if task.due_date %>
+                  <span class="<%= 'text-danger' if task.overdue? %>">
+                    <i class="fas fa-calendar me-1"></i>
+                    <%= task.due_date.strftime("%d/%m/%Y") %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="col-auto">
+          <div class="d-flex gap-2 flex-wrap">
+            <%= link_to task, class: "btn btn-outline-primary btn-sm" do %>
+              <i class="fas fa-eye"></i>
+            <% end %>
+
+            <%= button_to toggle_complete_task_path(task),
+                method: :patch,
+                remote: true,
+                class: "btn btn-#{task.completed ? 'warning' : 'success'} btn-sm" do %>
+              <i class="fas fa-<%= task.completed ? 'undo' : 'check' %>"></i>
+            <% end %>
+
+            <%= button_to task,
+                method: :delete,
+                data: { confirm: "Supprimer cette tâche ?" },
+                class: "btn btn-outline-danger btn-sm" do %>
+              <i class="fas fa-trash"></i>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
