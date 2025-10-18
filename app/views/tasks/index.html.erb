@@ -3,218 +3,104 @@
   <div class="page-header">
     <h1 class="display-4">
       <i class="fas fa-list-check me-3"></i>
-      Mes Tâches
+      Toutes mes Tâches
     </h1>
-    <p class="subtitle">Gérez et suivez toutes vos tâches en un seul endroit</p>
+    <p class="subtitle">Vue d'ensemble de toutes vos tâches</p>
   </div>
 
-  <!-- Barre de recherche moderne -->
-  <%= form_with url: tasks_path, method: :get, local: true, class: "mb-4" do |form| %>
-    <div class="row justify-content-center">
+  <!-- Container de recherche et filtres -->
+  <div data-controller="search" 
+       data-search-url-value="<%= tasks_path %>"
+       class="mb-5">
+    
+    <!-- Barre de recherche moderne avec temps réel -->
+    <div class="row justify-content-center mb-4">
       <div class="col-md-8">
         <div class="glass-card p-3">
           <div class="input-group">
-            <%= form.text_field :search,
-                placeholder: "Rechercher une tâche par titre ou description...",
-                value: params[:search],
-                class: "form-control form-control-lg" %>
-            <button class="btn btn-primary" type="submit">
-              <i class="fas fa-search"></i>
+            <span class="input-group-text bg-transparent border-0">
+              <i class="fas fa-search text-muted"></i>
+            </span>
+            <input type="text"
+                   class="form-control form-control-lg border-0"
+                   placeholder="Rechercher une tâche..."
+                   data-search-target="input"
+                   data-action="input->search#search"
+                   value="<%= params[:search] %>">
+            <button class="btn btn-outline-secondary border-0"
+                    data-action="click->search#clear"
+                    type="button">
+              <i class="fas fa-times"></i>
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
-
-  <!-- Filtres modernes -->
-  <div class="text-center mb-4">
-    <div class="filter-buttons">
-      <%= link_to tasks_path,
-          class: "btn #{'btn-primary' if params[:status].blank?} #{'btn-outline-secondary' unless params[:status].blank?}" do %>
-        <i class="fas fa-list me-1"></i>
-        Toutes
-      <% end %>
-
-      <%= link_to tasks_path(status: 'pending'),
-          class: "btn #{'btn-warning' if params[:status] == 'pending'} #{'btn-outline-warning' unless params[:status] == 'pending'}" do %>
-        <i class="fas fa-clock me-1"></i>
-        En cours
-      <% end %>
-
-      <%= link_to tasks_path(status: 'completed'),
-          class: "btn #{'btn-success' if params[:status] == 'completed'} #{'btn-outline-success' unless params[:status] == 'completed'}" do %>
-        <i class="fas fa-check-circle me-1"></i>
-        Terminées
-      <% end %>
-    </div>
-  </div>
-
-  <!-- Statistiques rapides -->
-  <% if @tasks.any? %>
-    <div class="row g-3 mb-5">
-      <div class="col-md-4">
-        <div class="stats-card">
-          <i class="fas fa-tasks icon" style="color: #667eea;"></i>
-          <h4><%= @tasks.count %></h4>
-          <div class="label">Tâches affichées</div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="stats-card">
-          <i class="fas fa-check-circle icon" style="color: #84fab0;"></i>
-          <h4><%= @tasks.where(completed: true).count %></h4>
-          <div class="label">Terminées</div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="stats-card">
-          <i class="fas fa-clock icon" style="color: #ffecd2;"></i>
-          <h4><%= @tasks.where(completed: false).count %></h4>
-          <div class="label">En cours</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Liste des tâches -->
-    <div class="row g-3">
-      <% @tasks.each_with_index do |task, index| %>
-        <div class="col-12 fade-in-up" style="animation-delay: <%= index * 0.05 %>s;">
-          <div class="glass-card task-card <%= 'completed' if task.completed %> <%= task.priority if task.priority.present? %>">
-            <div class="card-body p-4">
-              <div class="row align-items-center">
-                <!-- Contenu principal -->
-                <div class="col-lg-8">
-                  <!-- Badges de statut -->
-                  <div class="mb-2">
-                    <% if task.completed %>
-                      <span class="badge badge-modern bg-success me-1">
-                        <i class="fas fa-check me-1"></i>Terminé
-                      </span>
-                    <% else %>
-                      <span class="badge badge-modern bg-warning me-1">
-                        <i class="fas fa-clock me-1"></i>En cours
-                      </span>
-                    <% end %>
-
-                    <% case task.priority %>
-                    <% when 'urgent' %>
-                      <span class="badge badge-modern bg-danger me-1">
-                        <i class="fas fa-fire me-1"></i>Urgent
-                      </span>
-                    <% when 'high' %>
-                      <span class="badge badge-modern bg-warning me-1">
-                        <i class="fas fa-bolt me-1"></i>Important
-                      </span>
-                    <% end %>
-
-                    <% if task.created_at > 1.day.ago %>
-                      <span class="badge badge-modern bg-info me-1">
-                        <i class="fas fa-star me-1"></i>Nouveau
-                      </span>
-                    <% end %>
-                  </div>
-
-                  <!-- Titre et description -->
-                  <h5 class="card-title mb-2 <%= 'text-decoration-line-through text-muted' if task.completed %>">
-                    <%= task.title %>
-                  </h5>
-
-                  <p class="card-text text-muted mb-3">
-                    <%= truncate(task.description, length: 150) %>
-                  </p>
-
-                  <!-- Métadonnées -->
-                  <div class="d-flex flex-wrap gap-3 text-muted small">
-                    <span>
-                      <i class="fas fa-folder me-1"></i>
-                      <%= link_to task.project.title, task.project, class: "text-decoration-none" %>
-                    </span>
-
-                    <% if task.due_date %>
-                      <span class="<%= 'text-danger fw-bold' if task.due_date < Date.current && !task.completed %>">
-                        <i class="fas fa-calendar me-1"></i>
-                        <%= task.due_date.strftime("%d/%m/%Y") %>
-                        <% if task.due_date < Date.current && !task.completed %>
-                          (En retard)
-                        <% end %>
-                      </span>
-                    <% end %>
-
-                    <span>
-                      <i class="fas fa-user me-1"></i>
-                      <%= task.user.email.split('@').first.capitalize %>
-                    </span>
-
-                    <span>
-                      <i class="fas fa-plus me-1"></i>
-                      <%= time_ago_in_words(task.created_at) %>
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                  <div class="d-flex gap-2 justify-content-lg-end flex-wrap">
-                    <%= link_to task, class: "btn btn-outline-primary btn-sm" do %>
-                      <i class="fas fa-eye me-1"></i>
-                      Voir
-                    <% end %>
-
-                    <% unless task.completed %>
-                      <%= link_to task, method: :patch,
-                          class: "btn btn-success btn-sm" do %>
-                        <i class="fas fa-check me-1"></i>
-                        Terminer
-                      <% end %>
-                    <% end %>
-
-                    <%= link_to task, method: :delete,
-                        data: { confirm: "Supprimer cette tâche ?" },
-                        class: "btn btn-outline-danger btn-sm" do %>
-                      <i class="fas fa-trash"></i>
-                    <% end %>
-                  </div>
-                </div>
+            <!-- Spinner de chargement -->
+            <div class="input-group-text bg-transparent border-0 d-none" 
+                 data-search-target="spinner">
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Recherche...</span>
               </div>
             </div>
           </div>
         </div>
-      <% end %>
-    </div>
-  <% else %>
-    <!-- État vide -->
-    <div class="text-center section-spacing">
-      <div class="glass-card p-5 mx-auto" style="max-width: 500px;">
-        <% if params[:search].present? || params[:status].present? %>
-          <!-- Aucun résultat de recherche/filtre -->
-          <i class="fas fa-search fa-4x mb-4" style="color: #667eea; opacity: 0.6;"></i>
-          <h3 class="mb-3">Aucun résultat</h3>
-          <p class="text-muted mb-4">
-            <% if params[:search].present? %>
-              Aucune tâche trouvée pour "<strong><%= params[:search] %></strong>".
-            <% else %>
-              Aucune tâche <%= params[:status] == 'completed' ? 'terminée' : 'en cours' %> trouvée.
-            <% end %>
-          </p>
-          <%= link_to tasks_path, class: "btn btn-primary btn-modern" do %>
-            <i class="fas fa-list me-2"></i>
-            Voir toutes les tâches
-          <% end %>
-        <% else %>
-          <!-- Vraiment aucune tâche -->
-          <i class="fas fa-tasks fa-4x mb-4" style="color: #667eea; opacity: 0.6;"></i>
-          <h3 class="mb-3">Aucune tâche</h3>
-          <p class="text-muted mb-4">
-            Vous n'avez encore aucune tâche assignée.
-            Commencez par créer un projet et ajoutez-y des tâches !
-          </p>
-          <%= link_to projects_path, class: "btn btn-primary btn-modern" do %>
-            <i class="fas fa-folder me-2"></i>
-            Voir mes projets
-          <% end %>
-        <% end %>
       </div>
     </div>
-  <% end %>
+
+    <!-- Filtres rapides -->
+    <div class="text-center mb-4">
+      <div class="btn-group" role="group">
+        <button type="button" 
+                class="btn <%= params[:status].blank? ? 'btn-primary' : 'btn-outline-secondary' %>"
+                data-action="click->search#filterStatus"
+                data-status="">
+          <i class="fas fa-list me-1"></i>
+          Toutes
+        </button>
+        <button type="button"
+                class="btn <%= params[:status] == 'pending' ? 'btn-warning' : 'btn-outline-warning' %>"
+                data-action="click->search#filterStatus"
+                data-status="pending">
+          <i class="fas fa-clock me-1"></i>
+          En cours
+        </button>
+        <button type="button"
+                class="btn <%= params[:status] == 'completed' ? 'btn-success' : 'btn-outline-success' %>"
+                data-action="click->search#filterStatus"
+                data-status="completed">
+          <i class="fas fa-check-circle me-1"></i>
+          Terminées
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <% if @tasks.any? %>
+      <div class="row g-3 mb-5">
+        <div class="col-md-4">
+          <div class="stats-card">
+            <i class="fas fa-tasks icon" style="color: #667eea;"></i>
+            <h4 data-search-target="count"><%= @tasks.count %></h4>
+            <div class="label">Résultats</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stats-card">
+            <i class="fas fa-check-circle icon" style="color: #84fab0;"></i>
+            <h4><%= @tasks.completed.count %></h4>
+            <div class="label">Terminées</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stats-card">
+            <i class="fas fa-exclamation-triangle icon" style="color: #ff9a9e;"></i>
+            <h4><%= @tasks.overdue.count %></h4>
+            <div class="label">En retard</div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Résultats de recherche -->
+    <div data-search-target="results">
+      <%= render "tasks/list", tasks: @tasks %>
+    </div>
+  </div>
 </div>
