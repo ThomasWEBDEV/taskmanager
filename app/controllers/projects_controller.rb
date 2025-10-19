@@ -7,8 +7,12 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    # Correction : utiliser le scope ordered défini dans le modèle Task
-    @tasks = @project.tasks.includes(:user).ordered
+    # Utiliser position si elle existe, sinon created_at
+    if Task.column_names.include?('position')
+      @tasks = @project.tasks.includes(:user).order(:position, :created_at)
+    else
+      @tasks = @project.tasks.includes(:user).order(:created_at)
+    end
   end
 
   def new
