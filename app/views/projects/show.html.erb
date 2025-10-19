@@ -113,7 +113,7 @@
     <div class="tasks-container" 
          data-controller="sortable"
          data-sortable-url-value="/tasks/:id/reorder">
-      <% @tasks.ordered.each_with_index do |task, index| %>
+      <% @tasks.each_with_index do |task, index| %>
         <div class="task-draggable fade-in-up" 
              style="animation-delay: <%= index * 0.05 %>s;"
              data-task-id="<%= task.id %>"
@@ -218,7 +218,7 @@
 
                     <%= button_to task,
                         method: :delete,
-			data: { confirm: "Supprimer cette tâche ?" },
+                        data: { confirm: "Supprimer cette tâche ?" },
                         class: "btn btn-outline-danger btn-sm" do %>
                       <i class="fas fa-trash"></i>
                     <% end %>
