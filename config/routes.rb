@@ -1,13 +1,19 @@
 Rails.application.routes.draw do
   devise_for :users
-  root to: 'projects#index'
 
   resources :projects do
-    member do
-      patch :complete_all_tasks
-    end
+    member { patch :complete_all_tasks }
     resources :tasks, only: [:new, :create]
   end
 
-  resources :tasks, only: [:index, :show, :update, :destroy]
+  resources :tasks do
+    member do
+      patch :reorder
+      # Nous ajoutons 'as: :task_toggle_complete' pour garantir le nom du helper path
+      patch :toggle_complete, as: :toggle_complete
+    end
+  end
+
+  # Ajoutez la route racine ici si elle n'y est pas
+  # root "projects#index"
 end
